@@ -17,8 +17,13 @@ const app = new Vue({
             return !!store.state.setup && !!store.state.catalog;
         }
     },
+    methods: {
+        removeFromCart(index) {
+            store.removeFromCart(index);
+        }
+    },
     created() {
         store.loadInitialData();
-        window.removeCartItem = store.removeFromCart;
+        window.removeCartItem = this.removeFromCart;
     }
 })
