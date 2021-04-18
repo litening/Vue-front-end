@@ -1,71 +1,80 @@
-Vue.component('app-item-detail', {
-    data: function () {
-        return {
-            quantity: 1,
-            options: []
-        }
+Vue.component("app-item-detail", {
+  data: function () {
+    return {
+      quantity: 1,
+      options: [],
+    };
+  },
+  computed: {
+    currentItem: function () {
+      if (store.state.currentItem) {
+        let optionState = [];
+        store.state.currentItem.OptionGroups?.forEach((v, k) => {
+          optionState.push("");
+        });
+        this.options = [...optionState];
+      }
+      return store.state.currentItem;
     },
-    computed: {
-        currentItem: function () {
-            if (store.state.currentItem) {
-                let optionState = [];
-                store.state.currentItem.OptionGroups?.forEach((v, k) => {
-                    optionState.push('');
-                });
-                this.options = [...optionState];
-            }
-            return store.state.currentItem;
-        }
-    },
-    mounted() {
-        store.setItemDetailModal(new bootstrap.Modal(this.$refs['itemDetailModalRef']))
-    },
-    methods: {
-        handleAddToCart: function (openCheckout = false) {
-            const haveBlankOption = this.options.filter((v) => !v);
-            if (haveBlankOption.length) {
-                alert('Please choose the options first');
-                return false;
-            }
-            if (this.quantity < 1) {
-                alert('Quantity must be minimum 1');
-                return false;
-            }
-            let productData = {
-                extraPrice: 0,
-                item: this.currentItem,
-                formValues: {
-                    ItemId: this.currentItem.CatalogItemId,
-                    DigitalItem: this.currentItem.DigitalProduct ? 1 : 0,
-                    MenuItem: this.currentItem.CatalogItemName,
-                    MenuPrice: this.currentItem.Price.toFixed(2),
-                    MenuWeight: this.currentItem.Weight,
-                    quantity: this.quantity,
-                    dropdowns: {},
-                },
-            };
-            this.currentItem.OptionGroups?.forEach((v, k) => {
-                v.OptionList.forEach((opt, ke) => {
-                    if (opt.ItemOptionId == this.options[k]) {
-                        productData.formValues.dropdowns[
-                            v.OptionGroupName.replace(/\s/g, '')
-                        ] = {
-                            value: opt.ItemOptionId,
-                            text: opt.ItemOptionDescription,
-                            price: opt.ItemOptionPrice,
-                            optionKey: ke,
-                            key: k,
-                        };
-                        productData.extraPrice += opt.ItemOptionPrice;
-                    }
-                });
-            });
-            store.addToCart(productData, openCheckout);
-            this.quantity = 1;
-            store.state.itemDetailModal.hide();
+  },
+  mounted() {
+    store.setItemDetailModal(
+      new bootstrap.Modal(this.$refs["itemDetailModalRef"])
+    );
+  },
+  methods: {
+    handleAddToCart: function (openCheckout = false) {
+      const haveBlankOption = this.options.filter((v) => !v);
+      if (haveBlankOption.length) {
+        alert("Please choose the options first");
+        return false;
+      }
+      if (this.quantity < 1) {
+        alert("Quantity must be minimum 1");
+        return false;
+      }
+      let productData = {
+        extraPrice: 0,
+        item: this.currentItem,
+        formValues: {
+          ItemId: this.currentItem.CatalogItemId,
+          DigitalItem: this.currentItem.DigitalProduct ? 1 : 0,
+          MenuItem: this.currentItem.CatalogItemName,
+          MenuPrice: this.currentItem.Price.toFixed(2),
+          MenuWeight: this.currentItem.Weight,
+          quantity: this.quantity,
+          dropdowns: {},
         },
+      };
+      this.currentItem.OptionGroups?.forEach((v, k) => {
+        v.OptionList.forEach((opt, ke) => {
+          if (opt.ItemOptionId == this.options[k]) {
+            productData.formValues.dropdowns[
+              v.OptionGroupName.replace(/\s/g, "")
+            ] = {
+              value: opt.ItemOptionId,
+              text: opt.ItemOptionDescription,
+              price: opt.ItemOptionPrice,
+              optionKey: ke,
+              key: k,
+            };
+            productData.extraPrice += opt.ItemOptionPrice;
+          }
+        });
+      });
+      store.addToCart(productData, openCheckout);
+      if (Object.values(productData.formValues.dropdowns).length) {
+        Object.values(productData.formValues.dropdowns).forEach((v) => {
+          store.trackActivity(3, productData.formValues.ItemId, v.value);
+        });
+      } else {
+        store.trackActivity(3, productData.formValues.ItemId);
+      }
+      this.quantity = 1;
+      store.state.itemDetailModal.hide();
     },
-    template: `
+  },
+  template: `
     <div
         class="modal fade"
         ref="itemDetailModalRef"
@@ -197,5 +206,5 @@ Vue.component('app-item-detail', {
             </div>
         </div>
       </div>
-    `
-})
+    `,
+});

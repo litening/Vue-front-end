@@ -1,14 +1,14 @@
-Vue.component('app-item', {
-    props: ['item'],
-    computed: {
+Vue.component("app-item", {
+  props: ["item"],
+  computed: {},
+  methods: {
+    showDetail: function () {
+      store.setCurrentItem(this.item);
+      store.state.itemDetailModal.show();
+      store.trackActivity(2, this.item.CatalogItemId);
     },
-    methods: {
-        showDetail: function () {
-            store.setCurrentItem(this.item);
-            store.state.itemDetailModal.show();
-        }
-    },
-    template: `
+  },
+  template: `
     <div class="card item-card shadow w-100">
         <div v-if="item.Badge" class="ribbon-wrapper">
           <div class="glow">&nbsp;</div>
@@ -52,5 +52,5 @@ Vue.component('app-item', {
         </div>
       </div>
     </div>
-    `
-})
+    `,
+});
