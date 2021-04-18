@@ -91,3 +91,6 @@
   color: var(--text-color);
 }
 
+.autocomplete-result-list li {
+  color: var(--primary-color-3) !important;
+}

@@ -1,6 +1,6 @@
 const app = new Vue({
-    el: '#app',
-    template: `
+  el: "#app",
+  template: `
         <div v-if="isLoaded">
             <app-header />
             <app-catalog />
@@ -9,21 +9,23 @@ const app = new Vue({
         </div>
         <loading-spinner v-else />
     `,
-    data: {
-        setup: store.state.setup
+  data: {
+    setup: store.state.setup,
+  },
+  computed: {
+    isLoaded: function () {
+      return !!store.state.setup && !!store.state.catalog;
     },
-    computed: {
-        isLoaded: function () {
-            return !!store.state.setup && !!store.state.catalog;
-        }
+  },
+  methods: {
+    removeFromCart(index) {
+      store.removeFromCart(index);
     },
-    methods: {
-        removeFromCart(index) {
-            store.removeFromCart(index);
-        }
-    },
-    created() {
-        store.loadInitialData();
-        window.removeCartItem = this.removeFromCart;
-    }
-})
+  },
+  created() {
+    store.loadInitialData();
+    window.removeCartItem = this.removeFromCart;
+  },
+});
+
+Vue.use(Autocomplete);
