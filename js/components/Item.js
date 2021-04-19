@@ -26,6 +26,7 @@ Vue.component("app-item", {
           class="shadow"
           :src="item.Images[0].ImageThumb"
           :alt="item.Images[0].AltText"
+          style="width:100%;"
         />
       </div>
       <div class="card-body">
@@ -35,13 +36,13 @@ Vue.component("app-item", {
       </div>
       <div class="card-footer bg-transparent">
         <div class="row d-flex align-items-center">
-          <div class="col-md-8">
+          <div class="col-md-6">
               <h4 v-if="item.StrikePrice" class="text-danger">
                 <s>Was $\{{item.StrikePrice.toFixed(2)}}</s>
               </h4>
             <h6 class="card-item-price">Only $\{{item.Price.toFixed(2)}}</h6>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6 text-end">
             <button
               class="btn shadow-sm item-card-select-btn px-3"
               @click="showDetail()"

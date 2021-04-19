@@ -33,7 +33,7 @@ Vue.component('app-catalog', {
                     <div
                         v-for="(item, i) in catalog.CatalogItems"
                         :key="item.CatalogItemId + '' + catalog.CategoryId"
-                        class="col-md-3 mb-3 d-flex"
+                        class="col-xxl-2 col-lg-3 col-md-4 mb-3 d-flex"
                     >
                         <app-item :item="item" />
                     </div>
