@@ -13,6 +13,7 @@ const ApiTrackActivity = (trackcode, trackingid, trackingOption) => {
       trackcode,
       trackingid,
       trackingOption,
+      userid: USER_ID,
     },
     { withCredentials: true }
   );
