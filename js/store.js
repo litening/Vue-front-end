@@ -26,6 +26,7 @@ const store = {
   async loadCatalog() {
     const res = await ApiCatalog();
     this.state.catalog = [...res.data.Catalog];
+    await this.trackActivity(1);
   },
   loadInitialData() {
     this.loadCatalog();

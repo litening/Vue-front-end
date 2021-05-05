@@ -23,6 +23,10 @@ Vue.component("app-item-detail", {
     );
   },
   methods: {
+    closeModal: function(){
+      store.state.itemDetailModal.hide();
+      store.trackActivity(3, this.currentItem.CatalogItemId);
+    },
     handleAddToCart: function (openCheckout = false) {
       const haveBlankOption = this.options.filter((v) => !v);
       if (haveBlankOption.length) {
@@ -65,13 +69,13 @@ Vue.component("app-item-detail", {
       store.addToCart(productData, openCheckout);
       if (Object.values(productData.formValues.dropdowns).length) {
         Object.values(productData.formValues.dropdowns).forEach((v) => {
-          store.trackActivity(3, productData.formValues.ItemId, v.value);
+          store.trackActivity(4, productData.formValues.ItemId, v.value);
         });
       } else {
-        store.trackActivity(3, productData.formValues.ItemId);
+        store.trackActivity(4, productData.formValues.ItemId);
       }
       this.quantity = 1;
-      store.state.itemDetailModal.hide();
+      this.closeModal()
     },
   },
   template: `
@@ -92,7 +96,7 @@ Vue.component("app-item-detail", {
                   type="button"
                   class="btn-close"
                   aria-label="Close"
-                  @click="store.state.itemDetailModal.hide()"
+                  @click="closeModal()"
                 ></button>
               </div>
               <div class="modal-body">
