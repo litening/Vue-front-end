@@ -23,7 +23,7 @@ Vue.component("app-item-detail", {
     );
   },
   methods: {
-    closeModal: function(){
+    closeModal: function () {
       store.state.itemDetailModal.hide();
       store.trackActivity(3, this.currentItem.CatalogItemId);
     },
@@ -75,7 +75,7 @@ Vue.component("app-item-detail", {
         store.trackActivity(4, productData.formValues.ItemId);
       }
       this.quantity = 1;
-      this.closeModal()
+      store.state.itemDetailModal.hide();
     },
   },
   template: `
